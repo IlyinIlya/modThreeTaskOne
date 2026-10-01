@@ -27,8 +27,10 @@ public class StudentController {
     }
 
     @GetMapping("/age/{age}")
-    public List<Student> getByAge(@PathVariable int age) {
-        return studentService.getByAge(age);
+    public List<Student> getStudents(
+            @RequestParam(required = false) Integer minAge,
+            @RequestParam(required = false) Integer maxAge) {
+        return studentService.getByAge(minAge, maxAge);
     }
 
     @PutMapping("/{id}")

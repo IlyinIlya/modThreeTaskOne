@@ -33,8 +33,10 @@ public class StudentService {
         students.remove(id);
     }
 
-    public List<Student> getByAge(int age) {
+    public List<Student> getByAge(Integer minAge, Integer maxAge) {
         return students.values().stream()
-                .filter(student -> student.getAge() == age).toList();
+                .filter(student -> minAge == null || student.getAge() >= minAge)
+                .filter(student -> maxAge == null || student.getAge() <= maxAge)
+                .toList();
     }
 }

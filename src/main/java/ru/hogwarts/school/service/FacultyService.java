@@ -34,8 +34,12 @@ public class FacultyService {
         faculties.remove(id);
     }
 
-    public List<Faculty> getByColor(String color) {
+    public List<Faculty> getByNameOrColor(String name, String color) {
         return faculties.values().stream()
-                .filter(faculty -> faculty.getColor().equalsIgnoreCase(color)).toList();
+                .filter(faculty ->
+                        name == null || faculty.getName().equalsIgnoreCase(name))
+                .filter(faculty ->
+                        color == null || faculty.getColor().equalsIgnoreCase(color))
+                .toList();
     }
 }
