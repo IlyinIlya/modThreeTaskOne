@@ -33,7 +33,7 @@ public class FacultyController {
     }
 
     @PutMapping("/{id}")
-    public  Faculty update(@PathVariable Long id, @RequestBody Faculty faculty) {
+    public Faculty update(@PathVariable Long id, @RequestBody Faculty faculty) {
         return facultyService.update(id, faculty);
     }
 

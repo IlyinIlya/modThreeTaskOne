@@ -11,7 +11,7 @@ import java.util.Map;
 public class FacultyService {
 
     private final Map<Long, Faculty> faculties = new HashMap<>();
-    private long counter= 0;
+    private long counter = 0;
 
     public Faculty create(Faculty faculty) {
         long id = ++counter;
