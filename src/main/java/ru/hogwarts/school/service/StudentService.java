@@ -23,11 +23,12 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
-    public Optional<Student> get(Long id) {
-        return studentRepository.findById(id);
+    public Student get(Long id) {
+        return studentRepository.findById(id).orElse(null);
     }
 
-    public Student update(Student student) {
+    public Student update(Long id, Student student) {
+        student.setId(id);
         return studentRepository.save(student);
     }
 
@@ -37,13 +38,13 @@ public class StudentService {
 
     public List<Student> getByAge(Integer minAge, Integer maxAge) {
         if (minAge != null && maxAge != null) {
-            return studentRepository.findByAgeBetweenValues(minAge, maxAge);
+            return studentRepository.findByAgeBetween(minAge, maxAge);
         }
         if (minAge != null) {
-            return studentRepository.findByAgeGreaterValue(minAge);
+            return studentRepository.findByAgeGreaterThanEqual(minAge);
         }
         if (maxAge != null) {
-            return studentRepository.findByAgeLessValue(maxAge);
+            return studentRepository.findByAgeLessThanEqual(maxAge);
         }
         return studentRepository.findAll();
     }

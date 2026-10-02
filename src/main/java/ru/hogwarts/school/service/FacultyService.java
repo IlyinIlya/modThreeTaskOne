@@ -24,11 +24,12 @@ public class FacultyService {
         return facultyRepository.save(faculty);
     }
 
-    public Optional<Faculty> get(Long id) {
-        return facultyRepository.findById(id);
+    public Faculty get(Long id) {
+        return facultyRepository.findById(id).orElse(null);
     }
 
-    public Faculty update(Faculty faculty) {
+    public Faculty update(Long id, Faculty faculty) {
+        faculty.setId(id);
         return facultyRepository.save(faculty);
     }
 
@@ -38,14 +39,17 @@ public class FacultyService {
 
     public List<Faculty> getByNameOrColor(String name, String color) {
         if (name != null && color != null) {
-            return facultyRepository.findByNameAndColor(name, color);
+            return facultyRepository.findByNameIgnoreCaseAndColorIgnoreCase(name, color);
         }
+
         if (name != null) {
-            return facultyRepository.findByName(name);
+            return facultyRepository.findByNameIgnoreCase(name);
         }
+
         if (color != null) {
-            return facultyRepository.findByColor(color);
+            return facultyRepository.findByColorIgnoreCase(color);
         }
+
         return facultyRepository.findAll();
     }
 }

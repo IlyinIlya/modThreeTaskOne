@@ -26,7 +26,7 @@ public class StudentController {
         return studentService.get(id);
     }
 
-    @GetMapping("/age/{age}")
+    @GetMapping("/age")
     public List<Student> getStudents(
             @RequestParam(required = false) Integer minAge,
             @RequestParam(required = false) Integer maxAge) {
