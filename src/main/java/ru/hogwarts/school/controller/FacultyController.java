@@ -25,7 +25,7 @@ public class FacultyController {
         return facultyService.get(id);
     }
 
-    @GetMapping("/color/{color}")
+    @GetMapping("/color")
     public List<Faculty> getFaculties(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String color) {

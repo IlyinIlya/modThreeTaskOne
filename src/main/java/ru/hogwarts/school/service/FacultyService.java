@@ -1,45 +1,55 @@
 package ru.hogwarts.school.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class FacultyService {
 
-    private final Map<Long, Faculty> faculties = new HashMap<>();
-    private long counter = 0;
+    private final FacultyRepository facultyRepository;
+
+    @Autowired
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
+    }
 
     public Faculty create(Faculty faculty) {
-        long id = ++counter;
-        faculty.setId(id);
-        faculties.put(id, faculty);
-        return faculty;
+        return facultyRepository.save(faculty);
     }
 
     public Faculty get(Long id) {
-        return faculties.get(id);
+        return facultyRepository.findById(id).orElse(null);
     }
 
     public Faculty update(Long id, Faculty faculty) {
         faculty.setId(id);
-        faculties.put(id, faculty);
-        return faculty;
+        return facultyRepository.save(faculty);
     }
 
     public void delete(Long id) {
-        faculties.remove(id);
+        facultyRepository.deleteById(id);
     }
 
     public List<Faculty> getByNameOrColor(String name, String color) {
-        return faculties.values().stream()
-                .filter(faculty ->
-                        name == null || faculty.getName().equalsIgnoreCase(name))
-                .filter(faculty ->
-                        color == null || faculty.getColor().equalsIgnoreCase(color))
-                .toList();
+        if (name != null && color != null) {
+            return facultyRepository.findByNameIgnoreCaseAndColorIgnoreCase(name, color);
+        }
+
+        if (name != null) {
+            return facultyRepository.findByNameIgnoreCase(name);
+        }
+
+        if (color != null) {
+            return facultyRepository.findByColorIgnoreCase(color);
+        }
+
+        return facultyRepository.findAll();
     }
 }

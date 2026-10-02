@@ -1,42 +1,51 @@
 package ru.hogwarts.school.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class StudentService {
-    private final Map<Long, Student> students = new HashMap<>();
-    private long counter = 0;
+    private final StudentRepository studentRepository;
+
+    @Autowired
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     public Student create(Student student) {
-        long id = ++counter;
-        student.setId(id);
-        students.put(id, student);
-        return student;
+        return studentRepository.save(student);
     }
 
     public Student get(Long id) {
-        return students.get(id);
+        return studentRepository.findById(id).orElse(null);
     }
 
     public Student update(Long id, Student student) {
         student.setId(id);
-        students.put(id, student);
-        return student;
+        return studentRepository.save(student);
     }
 
     public void delete(Long id) {
-        students.remove(id);
+        studentRepository.deleteById(id);
     }
 
     public List<Student> getByAge(Integer minAge, Integer maxAge) {
-        return students.values().stream()
-                .filter(student -> minAge == null || student.getAge() >= minAge)
-                .filter(student -> maxAge == null || student.getAge() <= maxAge)
-                .toList();
+        if (minAge != null && maxAge != null) {
+            return studentRepository.findByAgeBetween(minAge, maxAge);
+        }
+        if (minAge != null) {
+            return studentRepository.findByAgeGreaterThanEqual(minAge);
+        }
+        if (maxAge != null) {
+            return studentRepository.findByAgeLessThanEqual(maxAge);
+        }
+        return studentRepository.findAll();
     }
 }
